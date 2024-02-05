@@ -6,7 +6,9 @@ const { findOne } = require("../../models/Product");
 
 router.get("/", async (req, res) => {
   // find all categories
-  const allCatagories = await Category.findAll();
+  const allCatagories = await Category.findAll({
+    include: Product
+  });
   res.status(200).json(allCatagories);
   // be sure to include its associated Products
 });
@@ -14,7 +16,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   // find one category by its `id` value
   console.log(req.params);
-  const categoryById = await Category.findOne({ where: { id: req.params.id } });
+  const categoryById = await Category.findOne({
+    where: { id: req.params.id },
+    include: Product 
+  });
   res.status(200).json(categoryById);
   // be sure to include its associated Products
 });
@@ -39,7 +44,7 @@ router.delete("/:id", async (req, res) => {
   // delete a category by its `id` value
   const deleteCategory = await Category.destroy({
     where: {
-      id: req.params.id
+      id: req.params.id,
     },
   });
   res.status(200).json(deleteCategory);
